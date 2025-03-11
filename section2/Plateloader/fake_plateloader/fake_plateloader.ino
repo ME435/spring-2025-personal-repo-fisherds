@@ -1,58 +1,51 @@
-/*
-  Serial Event example
-
-  When new serial data arrives, this sketch adds it to a String.
-  When a newline is received, the loop prints the string and clears it.
-
-  A good test for this is to try it with a GPS receiver that sends out
-  NMEA 0183 sentences.
-
-  NOTE: The serialEvent() feature is not available on the Leonardo, Micro, or
-  other ATmega32U4 based boards.
-
-  created 9 May 2011
-  by Tom Igoe
-
-  This example code is in the public domain.
-
-  https://www.arduino.cc/en/Tutorial/BuiltInExamples/SerialEvent
-*/
-
-String inputString = "";      // a String to hold incoming data
-bool stringComplete = false;  // whether the string is complete
+String inputString = "";
+bool stringComplete = false;
 
 void setup() {
-  // initialize serial:
-  Serial.begin(9600);
-  // reserve 200 bytes for the inputString:
+  Serial.begin(19200);
   inputString.reserve(200);
 }
 
 void loop() {
-  // print the string when a newline arrives:
   if (stringComplete) {
-    Serial.println(inputString);
-    // clear the string:
+
+    if (inputString.equals("RESET")) {
+      delay(1000);  // Simulated robot moving
+      Serial.println("READY,  SAGIAN PE Loader, ROM Ver. 1.1.6, 12APR2001");
+    } else if (inputString.startsWith("MOVE ")) {
+      delay(3000);
+      Serial.println("READY");
+    } else if (inputString.equals("Z-AXIS EXTEND")) {
+      Serial.println("READY, EXTENDED");
+    } else if (inputString.equals("Z-AXIS RETRACT")) {
+      Serial.println("READY, RETRACTED");
+    } else if (inputString.startsWith("X-AXIS ")) {
+      Serial.println("READY");
+    } else if (inputString.equals("GRIPPER OPEN")) {
+      Serial.println("READY, OPEN");
+    } else if (inputString.equals("GRIPPER CLOSE")) {
+      Serial.println("READY, CLOSED, NOPLATE");
+    } else if (inputString.startsWith("SET_DELAY ")) {
+      Serial.println("This feature is not supported on this fake plateloader");
+    } else if (inputString.equals("LOADER_STATUS")) {
+      Serial.println("READY, POSITION 3, Z-AXIS RETRACTED, GRIPPER CLOSED, NOPLATE");
+    } else {
+      Serial.print("Received Unknown command: ");
+      Serial.println(inputString);
+    }
+
     inputString = "";
     stringComplete = false;
   }
 }
 
-/*
-  SerialEvent occurs whenever a new data comes in the hardware serial RX. This
-  routine is run between each time loop() runs, so using delay inside loop can
-  delay response. Multiple bytes of data may be available.
-*/
 void serialEvent() {
   while (Serial.available()) {
-    // get the new byte:
     char inChar = (char)Serial.read();
-    // add it to the inputString:
-    inputString += inChar;
-    // if the incoming character is a newline, set a flag so the main loop can
-    // do something about it:
     if (inChar == '\n') {
       stringComplete = true;
+    } else {
+      inputString += inChar;
     }
   }
 }
