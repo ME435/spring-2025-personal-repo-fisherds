@@ -12,8 +12,17 @@ classdef Beer < handle
             obj.SizeOz = sizeOz;
         end
         
-        function outputArg = method1(obj,inputArg)
-            outputArg = obj.Property1 + inputArg;
+        function drink(obj)
+            if obj.IsFull
+                fprintf("Drank the beer\n");
+                obj.IsFull = false;
+            else
+                fprintf("This beer is already empty\n");
+            end
+        end
+
+        function refill(obj)
+            obj.IsFull = true;
         end
     end
 end
