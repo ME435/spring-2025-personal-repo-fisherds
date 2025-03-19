@@ -2,7 +2,7 @@ import time
 import serial
 
 class PlateLoader:
-    def __init__(self, name="/dev/cu.usbmodem1201"):
+    def __init__(self, name="/dev/cu.usbmodem21101"):
         self.name = name
         self.is_connected = False
         self.ser = None
