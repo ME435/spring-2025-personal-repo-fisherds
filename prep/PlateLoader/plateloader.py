@@ -1,59 +1,65 @@
-import time
 import serial
+import time
 
 class PlateLoader:
-    def __init__(self, name="/dev/cu.usbmodem21101"):
-        self.name = name
+    def __init__(self):
         self.is_connected = False
         self.ser = None
-    
-    def send_message(self, command):
-        message_bytes = (command + "\n").encode()
-        print(f"Sent     --> {message_bytes.decode().strip()}")
-        self.ser.write(message_bytes)
-        while self.ser.in_waiting == 0:
-            time.sleep(0.1) # Avoids the self.ser.readline timeout
-        while self.ser.in_waiting > 0:
-            received = self.ser.readline()
-            print("Received --> " + received.decode().strip())
-        return received
-
-    def connect(self):
-        self.ser = serial.Serial(self.name, baudrate = 19200)
-        print("Connecting… ", end="")
-        while self.ser.is_open == False:
-            time.sleep(0.1)
-        print("Connected")
-        time.sleep(1.0) # Important for some computers
-        self.ser.reset_input_buffer()
+        
+    def connect(self, port="/dev/cu.usbmodem21101"):
         self.is_connected = True
-
+        self.ser = serial.Serial(port, baudrate=19200)
+        print("Connecting... ", end="")
+        while not self.ser.is_open:
+            time.sleep(0.1)
+        print("Connected!")
+        time.sleep(1)
+        self.ser.reset_input_buffer()
+    
+    def disconnect(self):
+        if self.is_connected and self.ser:
+            self.ser.close()
+            self.is_connected = False
+            print("Disconnected.")
+    
+    def send_command(self, command):
+        if not self.is_connected:
+            self.connect()
+            
+        # Sending
+        message_bytes = (command + "\n").encode()
+        print("Sending:", message_bytes)
+        self.ser.write(message_bytes)
+        
+        # Receiving
+        while self.ser.in_waiting == 0:
+            time.sleep(0.1)
+        while self.ser.in_waiting > 0:
+            response = self.ser.readline()
+            print("Received:", response.decode().strip())
+        return response
+        
 
 if __name__ == "__main__":
+    print("Testing PlateLoader")
     plateloader = PlateLoader()
-    if plateloader.is_connected == False:
-        plateloader.connect()
+    plateloader.connect()
     while True:
-        print("0: Exit")
-        print("1: Reset")
-        print("2: X-aix")
-        print("3: Z-axis")
-        print("4: Gripper")
-        choice = input("Make a selection: ")
         resp = ""
-        if choice == "0":
+        print("\n\n0. Exit")
+        print("1. RESET")
+        print("2. X-AXIS")
+        selection = input("Make a selection: ")
+        if selection == "0":
             break
-        if choice == "1":
-            resp = plateloader.send_message("RESET")
-        if choice == "2":
-            to_pos = input("Where to: ")
-            resp = plateloader.send_message(f"X-AXIS {to_pos}")
-        if choice == "3":
-            z = input("Press 1 to Extend, 2 to Retract: ")
-            if z == "1":
-                resp = plateloader.send_message('Z-AXIS EXTEND')
-            if z == "2":
-                resp = plateloader.send_message('Z-AXIS RETRACT\n')
-        print(resp)
-    print("Goodbye")
-
+        elif selection == "1":
+            resp = plateloader.send_command("RESET")
+        elif selection == "2":
+            to_where = input("Enter X-AXIS position: ")
+            resp = plateloader.send_command(f"X-AXIS {to_where}")
+        else:
+            print("Invalid selection", selection)
+        print("Response:", resp)
+        
+    print("Goodbye!")
+    

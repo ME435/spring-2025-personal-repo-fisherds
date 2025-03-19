@@ -16,8 +16,9 @@ def handle_naked_domain():
 def api_command(command):
     with serial_lock:
         plateLoader = PlateLoader()
-        # plateLoader.connect()  # optional
-        response = plateLoader.send_message(command)
+        plateLoader.connect()  # optional
+        response = plateLoader.send_command(command)
+        plateLoader.disconnect()  # Good do do this.
     return response
     # print(f"Got the request {command}")
     # return f"TODO send {command}"
