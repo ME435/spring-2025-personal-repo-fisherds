@@ -16,7 +16,7 @@ def handle_naked_domain():
 def api_command(command):
     with serial_lock:
         plateLoader = PlateLoader()
-        plateLoader.connect()  # optional
+        plateLoader.connect("/dev/ttyACM0")
         response = plateLoader.send_command(command)
         plateLoader.disconnect()  # Good do do this.
     return response
