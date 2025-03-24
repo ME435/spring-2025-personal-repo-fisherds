@@ -16,6 +16,12 @@ class Plateloader:
         self.ser.reset_input_buffer()
         self.is_connected = True
         
+    def disconnect(self):
+        if self.is_connected:
+            self.ser.close()
+            self.is_connected = False
+            print("Disconnected")
+        
     def send_command(self, command):
         if not self.is_connected:
             self.connect()
@@ -55,4 +61,5 @@ if __name__ == "__main__":
         print("Response:", response)
     
     print("Goodbye!")
+    plateloader.disconnect()
         
