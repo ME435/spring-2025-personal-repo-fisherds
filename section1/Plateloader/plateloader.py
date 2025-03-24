@@ -36,7 +36,7 @@ class Plateloader:
 if __name__ == "__main__":
     print("Running a Plateloader test program")
     plateloader = Plateloader()
-    plateloader.connect()
+    plateloader.connect("/dev/ttyACM0")
     while True:
         response = ""
         print("\n\n0. Exit")
