@@ -15,6 +15,12 @@ class PlateLoader:
         print("Connected!")
         time.sleep(1)
         self.ser.reset_input_buffer()
+    
+    def disconnect(self):
+        if self.is_connected:
+            self.ser.close()
+            self.is_connected = False
+            print("Disconnected")
         
     def send_command(self, command):
         if not self.is_connected:
@@ -37,7 +43,7 @@ class PlateLoader:
 if __name__ == "__main__":
     print("Testing PlateLoader")
     plateloader = PlateLoader()
-    plateloader.connect()
+    plateloader.connect("/dev/ttyACM0")
     while True:
         resp = ""
         print("\n\n0. Exit")
