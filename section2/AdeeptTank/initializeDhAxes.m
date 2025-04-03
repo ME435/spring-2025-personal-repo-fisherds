@@ -3,7 +3,7 @@ function initializeDhAxes
 % Begin: Setup for this stand alone version that will NOT go into the GUI.
 close all
 app.axes_arm = axes;  % Create a new axes and save a handle to it.
-app.jointAngles = [0 0 0]; % Start at the zero angle position.
+app.jointAngles = [20 45 10]; % Start at the zero angle position.
 %  End : Setup for this stand alone version that will NOT go into the GUI.
 
 
@@ -23,6 +23,7 @@ app.axes_arm.Visible = 'off';
 
 % Create vertices for all the patches
 makeStlLink("AdeeptL0.stl", app.axes_arm, [.2 .2 .2]);  % Doesn't move. No need to save a handle to it.
+
 % Save references to the vertices of each patch, make points 4x1 not 3x1.
 app.link1Patch = makeStlLink("AdeeptL1.stl", app.axes_arm, [112/255 198/255 210/255]);
 app.link1Vertices = get(app.link1Patch, 'Vertices')';
@@ -43,21 +44,25 @@ end
 
 function updateArm(app)
 
-% TODO: Create the A homogeneous transformation matrices for the given jointAngles.
+% Create the A homogeneous transformation matrices for the given jointAngles.
+
+A1 = create_A_matrix(64, 0,   0, app.jointAngles(1))
+A2 = create_A_matrix(0,  0, -90, app.jointAngles(2))
+A3 = create_A_matrix(0, 140,  0, app.jointAngles(3))
 
 % TODO: Use the current A matricies to form the T0_n matricies.
-% T0_1 = 
-% T0_2 = 
-% T0_3 = 
+T0_1 = A1
+T0_2 = A1 * A2
+T0_3 = A1 * A2 * A3
 
-% TODO: Use the current T matricies to transform the original patch vertices
-% link1VerticesWRTground = T0_1 * app.link1Vertices;
-% link2VerticesWRTground = T0_2 * app.link2Vertices;
-% link3VerticesWRTground = T0_3 * app.link3Vertices;
+% Use the current T matricies to transform the original patch vertices
+link1VerticesWRTground = T0_1 * app.link1Vertices;
+link2VerticesWRTground = T0_2 * app.link2Vertices;
+link3VerticesWRTground = T0_3 * app.link3Vertices;
 
-% TODO: Update the patches with the newly transformed vertices
-% set(app.link1Patch,'Vertices', link1VerticesWRTground(1:3,:)');
-% set(app.link2Patch,'Vertices', link2VerticesWRTground(1:3,:)');
-% set(app.link3Patch,'Vertices', link3VerticesWRTground(1:3,:)');
+% Update the patches with the newly transformed vertices
+set(app.link1Patch,'Vertices', link1VerticesWRTground(1:3,:)');
+set(app.link2Patch,'Vertices', link2VerticesWRTground(1:3,:)');
+set(app.link3Patch,'Vertices', link3VerticesWRTground(1:3,:)');
 
 end
