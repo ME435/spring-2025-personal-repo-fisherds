@@ -27,8 +27,9 @@ def turn_off_leds(r, y, g):
 def print_names(names, led):
     print("Printing names")
     led.on()
-    for name in names:
-        print("Hello", name)
+    print("Hello", names)
+    # for name in names:
+    #     print("Hello", name)
     time.sleep(1.0)
     led.off()
 
