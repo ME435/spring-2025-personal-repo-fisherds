@@ -71,10 +71,10 @@ class Ordinary_Car:
     
     def set_motor_model(self, duty1, duty2, duty3, duty4):
         duty1,duty2,duty3,duty4=self.duty_range(duty1,duty2,duty3,duty4)
-        self.left_upper_wheel(duty1)
-        self.left_lower_wheel(duty2)
-        self.right_upper_wheel(duty3)
-        self.right_lower_wheel(duty4)
+        self.left_upper_wheel(-duty1)
+        self.left_lower_wheel(-duty2)
+        self.right_upper_wheel(-duty3)
+        self.right_lower_wheel(-duty4)
 
     def close(self):
         self.set_motor_model(0,0,0,0)
@@ -83,15 +83,23 @@ class Ordinary_Car:
 if __name__=='__main__':
     PWM = Ordinary_Car()          
     try:
+        print("Forward")
         PWM.set_motor_model(2000,2000,2000,2000)       #Forward
-        time.sleep(1)
+        time.sleep(2)
+        print("Back")
         PWM.set_motor_model(-2000,-2000,-2000,-2000)   #Back
-        time.sleep(1)
+        time.sleep(2)
+        print("Left")
         PWM.set_motor_model(-2000,-2000,2000,2000)     #Left 
         time.sleep(1)
+        print("Right")
         PWM.set_motor_model(2000,2000,-2000,-2000)     #Right    
+        # print("Running")
+        # PWM.set_motor_model(1500,1500,1500,1500)
         time.sleep(1)
-        PWM.set_motor_model(0,0,0,0)                   #Stop
+        PWM.set_motor_model(0,0,0,0)                   
+        print("Stopping")
+        #Stop
     except KeyboardInterrupt:  # When 'Ctrl+C' is pressed, the child program destroy() will be  executed.
         print ("\nEnd of program")
     finally:
