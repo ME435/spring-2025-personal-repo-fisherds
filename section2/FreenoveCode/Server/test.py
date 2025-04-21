@@ -3,14 +3,28 @@ def test_Led():
     from led import Led
     led=Led()
     try:
-        led.ledIndex(0x01, 255,   0,   0)      #Red
-        led.ledIndex(0x02, 255, 125,   0)      #orange
-        led.ledIndex(0x04, 255, 255,   0)      #yellow
-        led.ledIndex(0x08,   0, 255,   0)      #green
-        led.ledIndex(0x10,   0, 255, 255)      #cyan-blue
-        led.ledIndex(0x20,   0,   0, 255)      #blue
-        led.ledIndex(0x40, 128,   0, 128)      #purple
-        led.ledIndex(0x80, 255, 255, 255)      #white
+        for k in range(8):
+            led.ledIndex(0x01, 255,   0,   0)      #Red
+            led.ledIndex(0x02, 255, 0,   0)      #orange
+            led.ledIndex(0x04, 255, 0,   0)      #yellow
+            led.ledIndex(0x08, 255, 0,   0)      #green
+            led.ledIndex(0x10, 255, 0, 0)      #cyan-blue
+            led.ledIndex(0x20, 255,   0, 0)      #blue
+            led.ledIndex(0x40, 255,   0, 0)      #purple
+            led.ledIndex(0x80, 255,   0, 0)      #white
+            time.sleep(0.5)  # Wait for 0.5 seconds
+            led.colorBlink(0)  #turn off the light
+            time.sleep(0.5)  # Wait for 0.5 second
+
+            # led.ledIndex(0x01, 255,   0,   0)      #Red
+            # led.ledIndex(0x02, 255, 125,   0)      #orange
+            # led.ledIndex(0x04, 255, 255,   0)      #yellow
+            # led.ledIndex(0x08,   0, 255,   0)      #green
+            # led.ledIndex(0x10,   0, 255, 255)      #cyan-blue
+            # led.ledIndex(0x20,   0,   0, 255)      #blue
+            # led.ledIndex(0x40, 128,   0, 128)      #purple
+            # led.ledIndex(0x80, 255, 255, 255)      #white
+
         print ("The LED has been lit, the color is red orange yellow green cyan-blue blue white")
         time.sleep(3)               #wait 3s
         led.colorBlink(0)  #turn off the light
@@ -24,18 +38,20 @@ def test_Motor():
     from motor import Ordinary_Car  
     PWM = Ordinary_Car()    
     try:
-        PWM.set_motor_model(1000,1000,1000,1000)         #Forward
-        print ("The car is moving forward")
-        time.sleep(1)
-        PWM.set_motor_model(-1000,-1000,-1000,-1000)     #Back
-        print ("The car is going backwards")
-        time.sleep(1)
-        PWM.set_motor_model(-1500,-1500,2000,2000)       #Turn left
-        print ("The car is turning left")
-        time.sleep(1)
-        PWM.set_motor_model(2000,2000,-1500,-1500)       #Turn right 
-        print ("The car is turning right")  
-        time.sleep(1)
+        PWM.set_motor_model(0, -1000, 0, 0)         # 1 wheel
+        time.sleep(3)
+        # PWM.set_motor_model(1000,1000,1000,1000)         #Forward
+        # print ("The car is moving forward")
+        # time.sleep(1)
+        # PWM.set_motor_model(-1000,-1000,-1000,-1000)     #Back
+        # print ("The car is going backwards")
+        # time.sleep(1)
+        # PWM.set_motor_model(-1500,-1500,2000,2000)       #Turn left
+        # print ("The car is turning left")
+        # time.sleep(1)
+        # PWM.set_motor_model(2000,2000,-1500,-1500)       #Turn right 
+        # print ("The car is turning right")  
+        # time.sleep(1)
         PWM.set_motor_model(0,0,0,0)                     #Stop
         print ("\nEnd of program")
     except KeyboardInterrupt:

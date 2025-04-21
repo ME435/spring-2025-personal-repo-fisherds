@@ -1,8 +1,8 @@
 # -*-coding: utf-8 -*-
 import time
 from parameter import ParameterManager
-from rpi_ledpixel import Freenove_RPI_WS281X
-from spi_ledpixel import Freenove_SPI_LedPixel
+# from rpi_ledpixel import Freenove_RPI_WS281X  # Pin 18 approach - fails anyway
+from spi_ledpixel import Freenove_SPI_LedPixel  # SPI GPIO10 approach that works!
 
 class Led:
     def __init__(self):
