@@ -1,10 +1,9 @@
 """
 Authors:  Dave Fisher and PUT_YOUR_NAME_HERE.
 """
-# TODO: 1.  Put your name in the above.
 
 import time
-
+from rosebot import RoseBot
 
 def main():
     """ Calls the desired TEST functions. """
@@ -21,7 +20,7 @@ def run_test_drive_system():
     # -------------------------------------------------------------------------
     # TODO: 2. Construct a robot, that is, a rosebot.RoseBot() object.
     # -------------------------------------------------------------------------
-    robot = None
+    robot = RoseBot()
 
     # -------------------------------------------------------------------------
     # STUDENTS: Do the work in this module as follows.
@@ -71,6 +70,11 @@ def run_test_go_stop(robot):
         #   sending it the two wheel speeds.  Keep going (time.sleep) for 3 seconds.
         #   Then call the  stop  method of the   drive_system   of the robot.
         # -------------------------------------------------------------------------
+        
+        robot.drive_system.go(left_wheel_speed, right_wheel_speed)
+        time.sleep(3)
+        robot.drive_system.stop()
+        print("Robot stopped.")
 
 
 
