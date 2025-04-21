@@ -17,7 +17,7 @@ class Car:
         self.car_sonic_servo_angle = 30
         self.car_sonic_servo_dir = 1
         self.car_sonic_distance = [30, 30, 30]
-        self.time_compensate = 3 #Depend on your own car,If you want to get the best out of the rotation mode, change the value by experimenting.
+        self.time_compensate = 2 #Depend on your own car,If you want to get the best out of the rotation mode, change the value by experimenting.
         self.start()
 
     def start(self):  
@@ -92,19 +92,49 @@ class Car:
         if (time.time() - self.car_record_time) > 0.2:
             self.car_record_time = time.time()
             infrared_value = self.infrared.read_all_infrared()
-            #print("infrared_value: " + str(infrared_value))
+            print("infrared_value: " + str(infrared_value))
+            
+            # if infrared_value == 2:
+            #     self.motor.set_motor_model(800,800,800,800)
+            # elif infrared_value == 4:
+            #     self.motor.set_motor_model(-1500,-1500,2500,2500)
+            # elif infrared_value == 6:
+            #     self.motor.set_motor_model(-2000,-2000,4000,4000)
+            # elif infrared_value == 1:
+            #     self.motor.set_motor_model(2500,2500,-1500,-1500)
+            # elif infrared_value == 3:
+            #     self.motor.set_motor_model(4000,4000,-2000,-2000)
+            # elif infrared_value == 7:
+            #     self.motor.set_motor_model(0,0,0,0)
+
+            scaling = 0.3
             if infrared_value == 2:
-                self.motor.set_motor_model(800,800,800,800)
+                self.motor.set_motor_model(
+                    int(800 * scaling), int(800 * scaling),
+                    int(800 * scaling), int(800 * scaling)
+                )
             elif infrared_value == 4:
-                self.motor.set_motor_model(-1500,-1500,2500,2500)
+                self.motor.set_motor_model(
+                    int(-1500 * scaling), int(-1500 * scaling),
+                    int(2500 * scaling), int(2500 * scaling)
+                )
             elif infrared_value == 6:
-                self.motor.set_motor_model(-2000,-2000,4000,4000)
+                self.motor.set_motor_model(
+                    int(-2000 * scaling), int(-2000 * scaling),
+                    int(4000 * scaling), int(4000 * scaling)
+                )
             elif infrared_value == 1:
-                self.motor.set_motor_model(2500,2500,-1500,-1500)
+                self.motor.set_motor_model(
+                    int(2500 * scaling), int(2500 * scaling),
+                    int(-1500 * scaling), int(-1500 * scaling)
+                )
             elif infrared_value == 3:
-                self.motor.set_motor_model(4000,4000,-2000,-2000)
+                self.motor.set_motor_model(
+                    int(4000 * scaling), int(4000 * scaling),
+                    int(-2000 * scaling), int(-2000 * scaling)
+                )
             elif infrared_value == 7:
-                self.motor.set_motor_model(0,0,0,0)
+                self.motor.set_motor_model(0, 0, 0, 0)
 
     def mode_light(self):
         if (time.time() - self.car_record_time) > 0.2:

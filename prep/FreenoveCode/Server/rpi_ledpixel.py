@@ -163,7 +163,7 @@ class Freenove_RPI_WS281X:
         return [r, g, b]
 
 if __name__ == '__main__':
-    led = FreenoveRPIWS281X(4, 255, "RGB")
+    led = Freenove_RPI_WS281X(4, 255, "RGB")
     try:
         if led.check_rpi_ws281x_state() != 0:
             led.set_led_count(4)
