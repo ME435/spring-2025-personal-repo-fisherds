@@ -20,6 +20,7 @@ class Led:
             self.is_support_led_function = True
 
         elif self.connect_version == 2 and (self.pi_version == 1 or self.pi_version == 2):
+            print("Using SPI LED strip")
             self.strip = Freenove_SPI_LedPixel(8, 255, 'GRB')
             self.is_support_led_function = True
 

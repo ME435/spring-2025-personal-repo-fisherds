@@ -2,6 +2,7 @@ def test_Led():
     import time
     from led import Led
     led=Led()
+    print("LED test program is starting ...")
     try:
         led.ledIndex(0x01, 255,   0,   0)      #Red
         led.ledIndex(0x02, 255, 125,   0)      #orange
@@ -24,18 +25,20 @@ def test_Motor():
     from motor import Ordinary_Car  
     PWM = Ordinary_Car()    
     try:
-        PWM.set_motor_model(1000,1000,1000,1000)         #Forward
-        print ("The car is moving forward")
-        time.sleep(1)
-        PWM.set_motor_model(-1000,-1000,-1000,-1000)     #Back
-        print ("The car is going backwards")
-        time.sleep(1)
-        PWM.set_motor_model(-1500,-1500,2000,2000)       #Turn left
-        print ("The car is turning left")
-        time.sleep(1)
-        PWM.set_motor_model(2000,2000,-1500,-1500)       #Turn right 
-        print ("The car is turning right")  
-        time.sleep(1)
+        PWM.set_motor_model(-1000, -1000, 1000, 1000)     #Upper left wheel
+        time.sleep(3)
+        # PWM.set_motor_model(1000,1000,1000,1000)         #Forward
+        # print ("The car is moving forward")
+        # time.sleep(1)
+        # PWM.set_motor_model(-1000,-1000,-1000,-1000)     #Back
+        # print ("The car is going backwards")
+        # time.sleep(1)
+        # PWM.set_motor_model(-1500,-1500,2000,2000)       #Turn left
+        # print ("The car is turning left")
+        # time.sleep(1)
+        # PWM.set_motor_model(2000,2000,-1500,-1500)       #Turn right 
+        # print ("The car is turning right")  
+        # time.sleep(1)
         PWM.set_motor_model(0,0,0,0)                     #Stop
         print ("\nEnd of program")
     except KeyboardInterrupt:

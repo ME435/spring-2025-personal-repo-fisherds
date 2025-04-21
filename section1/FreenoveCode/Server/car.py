@@ -17,7 +17,7 @@ class Car:
         self.car_sonic_servo_angle = 30
         self.car_sonic_servo_dir = 1
         self.car_sonic_distance = [30, 30, 30]
-        self.time_compensate = 3 #Depend on your own car,If you want to get the best out of the rotation mode, change the value by experimenting.
+        self.time_compensate = 1.6 #Depend on your own car,If you want to get the best out of the rotation mode, change the value by experimenting.
         self.start()
     def start(self):  
         if self.servo is None:
