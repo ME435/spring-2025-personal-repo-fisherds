@@ -3,48 +3,55 @@ import time
 import math
 
 class DriveSystem:
-
+    
     def __init__(self):
         self.car = OrdinaryCar()
-    
-    def _scale_speed(self, value):
-        return int((value / 100) * 4095)
+        
+    def scale_speed(self, speed):
+        return int(speed / 100 * 4095)
     
     def go(self, left_speed, right_speed):
-        left_duty = self._scale_speed(left_speed)
-        right_duty = self._scale_speed(right_speed)
+        left_duty = self.scale_speed(left_speed)
+        right_duty = self.scale_speed(right_speed)
         self.car.set_motor_model(left_duty, left_duty, right_duty, right_duty)
-
-    def stop(self):
-        self.car.set_motor_model(0, 0, 0, 0)
-        
-    def rotate_left(self, speed):
-        duty = self._scale_speed(speed)
-        self.car.set_motor_model(-duty, -duty, duty, duty)
-
-    def rotate_right(self, speed):
-        duty = self._scale_speed(speed)
-        self.car.set_motor_model(duty, duty, -duty, -duty)
-
-    def strafe_left(self, speed):
-        duty = self._scale_speed(speed)
-        self.car.set_motor_model(-duty, duty, duty, -duty)
-
-    def strafe_right(self, speed):
-        duty = self._scale_speed(speed)
-        self.car.set_motor_model(duty, -duty, -duty, duty)
-        
-    def go_straight_for_seconds(self, speed, seconds):
+    
+    def go_straight_for_seconds(self, seconds, speed):
         self.go(speed, speed)
         time.sleep(seconds)
         self.stop()
-    
-    def go_straight_for_inches(self, speed, inches):
-        # Convert a number inches into seconds
-        inches_per_second = 0.172 * speed + 2.15
-        # TODO: Use this to get seconds...
-        self.go_straight_for_seconds(speed, inches / inches_per_second)
-    
+        
+    def strafe_left(self, speed):
+        duty = self.scale_speed(speed)
+        self.car.set_motor_model(-duty, duty, duty, -duty)
+        
+    def strafe_right(self, speed):
+        self.strafe_left(-speed)
+
+    def go_straight_for_inches(self, inches, speed):
+        # TODO in Lab 4A run some experiment using go_straight_for_seconds to guess a good m and B
+        m = 0.2
+        B = 0
+        inches_per_second = m * speed + B
+        seconds = inches / inches_per_second
+        self.go_straight_for_seconds(seconds, speed)
+
+    def spin_in_place_for_seconds(self, seconds, speed, isLeft=True):
+        duty = self.scale_speed(speed)
+        if isLeft:
+            self.car.set_motor_model(-duty, -duty, duty, duty)
+        else:
+            self.car.set_motor_model(duty, duty, -duty, -duty)
+        time.sleep(seconds)
+        self.stop()
+        
+    def spin_in_place_for_degrees(self, degrees, speed, isLeft=True):
+        # TODO in Lab 4A run some experiment using spin_in_place_for_seconds to guess a good m and B
+        m = 7
+        B = 0
+        degrees_per_second = m * speed + B
+        seconds = degrees / degrees_per_second
+        self.spin_in_place_for_seconds(seconds, speed, isLeft)
+
     def move_in_direction(self, speed, angle_in_degrees):
         # Front           Front
         #  Left           Right
@@ -73,7 +80,7 @@ class DriveSystem:
         rr = rr / max_val * speed
 
         # Set motor values
-        self.car.set_motor_model(self._scale_speed(fl), self._scale_speed(rl), self._scale_speed(fr), self._scale_speed(rr))
+        self.car.set_motor_model(self.scale_speed(fl), self.scale_speed(rl), self.scale_speed(fr), self.scale_speed(rr))
 
     def strafe_circle(self, speed, duration_seconds):
         steps = 100  # More steps = smoother circle
@@ -82,32 +89,30 @@ class DriveSystem:
 
         for i in range(steps):
             angle = i * angle_step
-            self.move_in_direction(angle, speed)
+            self.move_in_direction(speed, angle)
             time.sleep(delay)
 
         self.stop()
-
+        
+    def stop(self):
+        self.car.set_motor_model(0, 0, 0, 0)
+    
     def close(self):
         self.car.close()
-        print("Drive system closed")
 
 
-
-if __name__ == "__main__":
-    ds = DriveSystem()
+if __name__ == '__main__':
+    drive_system = DriveSystem()
     try:
-        # ds.strafe_right(50)
-        ds.move_in_direction(0, 50)      # Forward
-        ds.move_in_direction(90, 50)     # Right
-        ds.move_in_direction(180, 50)    # Backward
-        ds.move_in_direction(270, 50)    # Left
-        ds.move_in_direction(45, 70)     # Diagonal front-right
-
-        time.sleep(0.8)
-        ds.stop()
-        print("Stopping")
-
-    except KeyboardInterrupt:  # When 'Ctrl+C' is pressed, the child program destroy() will be  executed.
-        print ("\nEnd of program")
+        # drive_system.go_straight_for_seconds(2, 50)
+        # drive_system.strafe_left(50)
+        # time.sleep(1)
+        # drive_system.strafe_right(50)
+        # time.sleep(1)
+        # drive_system.spin_in_place_for_seconds(2, 50, True)
+        # drive_system.spin_in_place_for_seconds(2, 50, False)
+        # drive_system.move_in_direction(50, 45)
+        # time.sleep(2)
+        drive_system.strafe_circle(50, 5)
     finally:
-        ds.close()
+        drive_system.close()

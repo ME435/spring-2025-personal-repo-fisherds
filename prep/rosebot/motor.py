@@ -2,10 +2,11 @@ import time
 from pca9685 import PCA9685
 
 class OrdinaryCar:
+    
     def __init__(self):
         self.pwm = PCA9685(0x40, debug=True)
         self.pwm.set_pwm_freq(50)
-        
+    
     def duty_range(self, duty1, duty2, duty3, duty4):
         if duty1 > 4095:
             duty1 = 4095
@@ -35,7 +36,7 @@ class OrdinaryCar:
         else:
             self.pwm.set_motor_pwm(0,4095)
             self.pwm.set_motor_pwm(1,4095)
-    
+            
     def left_lower_wheel(self,duty):
         if duty>0:
             self.pwm.set_motor_pwm(3,0)
@@ -46,7 +47,7 @@ class OrdinaryCar:
         else:
             self.pwm.set_motor_pwm(2,4095)
             self.pwm.set_motor_pwm(3,4095)
-    
+            
     def right_upper_wheel(self,duty):
         if duty>0:
             self.pwm.set_motor_pwm(6,0)
@@ -57,7 +58,7 @@ class OrdinaryCar:
         else:
             self.pwm.set_motor_pwm(6,4095)
             self.pwm.set_motor_pwm(7,4095)
-    
+            
     def right_lower_wheel(self,duty):
         if duty>0:
             self.pwm.set_motor_pwm(4,0)
@@ -68,7 +69,7 @@ class OrdinaryCar:
         else:
             self.pwm.set_motor_pwm(4,4095)
             self.pwm.set_motor_pwm(5,4095)
-    
+            
     def set_motor_model(self, duty1, duty2, duty3, duty4):
         duty1,duty2,duty3,duty4=self.duty_range(duty1,duty2,duty3,duty4)
         self.left_upper_wheel(-duty1)
@@ -83,23 +84,15 @@ class OrdinaryCar:
 if __name__=='__main__':
     PWM = Ordinary_Car()          
     try:
-        print("Forward")
         PWM.set_motor_model(2000,2000,2000,2000)       #Forward
-        time.sleep(2)
-        print("Back")
+        time.sleep(1)
         PWM.set_motor_model(-2000,-2000,-2000,-2000)   #Back
-        time.sleep(2)
-        print("Left")
+        time.sleep(1)
         PWM.set_motor_model(-2000,-2000,2000,2000)     #Left 
         time.sleep(1)
-        print("Right")
         PWM.set_motor_model(2000,2000,-2000,-2000)     #Right    
-        # print("Running")
-        # PWM.set_motor_model(1500,1500,1500,1500)
         time.sleep(1)
-        PWM.set_motor_model(0,0,0,0)                   
-        print("Stopping")
-        #Stop
+        PWM.set_motor_model(0,0,0,0)                   #Stop
     except KeyboardInterrupt:  # When 'Ctrl+C' is pressed, the child program destroy() will be  executed.
         print ("\nEnd of program")
     finally:
