@@ -35,13 +35,11 @@ def run_test_drive_system():
     #        RE-commenting out the previous test to reduce the testing.
     # -------------------------------------------------------------------------
 
-    run_test_go_stop(robot)
-    # run_test_go_straight_for_seconds(robot)
+    # run_test_go_stop(robot)
+    run_test_go_straight_for_seconds(robot)
     # run_test_go_straight_for_inches(robot)
     # run_test_spin_in_place_for_seconds(robot)
     # run_test_spin_in_place_for_degrees(robot)
-    # run_test_turn_for_seconds(robot)
-    # run_test_turn_for_degrees(robot)
     # run_test_draw_polygon(robot)
 
 
@@ -66,10 +64,16 @@ def run_test_go_stop(robot):
         input("Press the ENTER key when ready for the robot to start moving.")
 
         # -------------------------------------------------------------------------
-        # TODO: 3. Call the  go  method of the   drive_system   of the robot,
+        # Call the  go  method of the   drive_system   of the robot,
         #   sending it the two wheel speeds.  Keep going (time.sleep) for 3 seconds.
         #   Then call the  stop  method of the   drive_system   of the robot.
         # -------------------------------------------------------------------------
+        robot.drive_system.go(left_wheel_speed, right_wheel_speed)
+        time.sleep(3)
+        robot.drive_system.stop()
+        print("The robot should have stopped moving.")
+    
+    robot.drive_system.close()  # Problaby not required, but good practice.
 
 
 
@@ -89,12 +93,29 @@ def run_test_go_straight_for_seconds(robot):
         if speed == 0:
             break
         seconds = float(input("Enter how many seconds to go (e.g., 2.3): "))
+        if seconds == 0:
+            break
+        direction = float(input("Direction (e.g., 90): "))
         input("Press the ENTER key when ready for the robot to start moving.")
 
         # -------------------------------------------------------------------------
-        # TODO: 4. Call the  go_straight_for_seconds  method of the   drive_system
+        # Call the  go_straight_for_seconds  method of the   drive_system
         #  of the robot, sending it the input  seconds  and  speed.
         # -------------------------------------------------------------------------
+        # robot.drive_system.go_straight_for_seconds(seconds, speed)
+        
+        # Hacky testing!
+        # robot.drive_system.strafe_left(speed)
+        # robot.drive_system.strafe_right(speed)
+        # time.sleep(seconds)
+        # robot.drive_system.stop()
+        
+        robot.drive_system.move_in_direction(speed, direction)
+        time.sleep(seconds)
+        robot.drive_system.stop() 
+        print("The robot should have stopped moving.")
+        
+    robot.drive_system.close()  # Problaby not required, but good practice.
 
 
 def run_test_go_straight_for_inches(robot):
@@ -115,11 +136,14 @@ def run_test_go_straight_for_inches(robot):
         input("Press the ENTER key when ready for the robot to start moving.")
 
         # -------------------------------------------------------------------------
-        # TODO: 5. Call the  go_straight_for_inches  method of the   drive_system
+        # Call the  go_straight_for_inches  method of the   drive_system
         #  of the robot, sending it the input  inches  and  speed.
         #  (The go_straight_for_inches method uses the same speed for both wheels.)
         # -------------------------------------------------------------------------
-
+        robot.drive_system.go_straight_for_inches(inches, speed)
+        print("The robot should have stopped moving.")
+        
+    robot.drive_system.close()  # Problaby not required, but good practice.
 
 def run_test_spin_in_place_for_seconds(robot):
     """
@@ -139,10 +163,14 @@ def run_test_spin_in_place_for_seconds(robot):
         input("Press the ENTER key when ready for the robot to start moving.")
 
         # -------------------------------------------------------------------------
-        # TODO: 6. Call the  spin_in_place_for_seconds  method of the   drive_system
+        # Call the  spin_in_place_for_seconds  method of the   drive_system
         #  of the robot, sending it the input  seconds  and  speed.
         #  (The go_straight_for_inches method uses the same speed for both wheels.)
         # -------------------------------------------------------------------------
+        robot.drive_system.spin_in_place_for_seconds(seconds, speed, isLeftSpin=False)
+        print("The robot should have stopped moving.")
+        
+    robot.drive_system.close()  # Problaby not required, but good practice.
 
 
 def run_test_spin_in_place_for_degrees(robot):
