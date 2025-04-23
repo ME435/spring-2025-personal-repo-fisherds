@@ -1,10 +1,11 @@
 import gpiozero as gz
 import time
-
+import warnings
 
 class UltraSonic:
 
     def __init__(self):
+        warnings.filterwarnings("ignore", category = gz.PWMSoftwareFallback)  # Ignore PWM software fallback warnings
         self.distance_sensor = gz.DistanceSensor(echo=22, trigger=27)
 
     def get_cm(self):
@@ -15,7 +16,6 @@ class UltraSonic:
 class LineSensors:
 
     def __init__(self):
-        print("Make the line sensors (all 3) as a class")
         self.was_left_side = True  # True if line was last seen on left side.
         self.left_sensor = gz.LineSensor(14)
         self.middle_sensor = gz.LineSensor(15)
@@ -72,13 +72,13 @@ class LineSensors:
 
 def main():
     print("Local testing for the two sensor types")
-    if False:
+    if True:
         test_sensor = UltraSonic()
         while True:
-            print(f"Distance in meters = {test_sensor.get()}")
+            print(f"Distance in cm = {test_sensor.get_cm()}")
             time.sleep(2.0)
 
-    if True:
+    if False:
         test_sensor = LineSensors()
         while True:
             print(f"Left = {test_sensor.get_left()}  Right = {test_sensor.get_right()}")
