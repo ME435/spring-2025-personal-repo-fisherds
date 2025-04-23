@@ -5,11 +5,11 @@ import time
 class UltraSonic:
 
     def __init__(self):
-        print("Make the Ultrasonic sensor")
         self.distance_sensor = gz.DistanceSensor(echo=22, trigger=27)
 
-    def get(self):
-        return self.distance_sensor.distance
+    def get_cm(self):
+        distance = self.distance_sensor.distance * 100  # Get the distance in centimeters
+        return round(float(distance), 1)  # Return the distance rounded to one decimal place
 
 
 class LineSensors:
