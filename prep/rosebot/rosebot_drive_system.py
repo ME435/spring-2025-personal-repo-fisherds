@@ -9,6 +9,10 @@ class DriveSystem:
         
     def scale_speed(self, speed):
         return int(speed / 100 * 4095)
+
+    def set_speeds(self, lf_speed, lr_speed, rf_speed, rr_speed):
+        self.car.set_motor_model(self.scale_speed(lf_speed), self.scale_speed(lr_speed),
+                                 self.scale_speed(rf_speed), self.scale_speed(rr_speed))
     
     def go(self, left_speed, right_speed):
         left_duty = self.scale_speed(left_speed)
