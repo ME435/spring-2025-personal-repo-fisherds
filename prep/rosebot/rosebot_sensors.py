@@ -22,19 +22,19 @@ class LineSensors:
         self.right_sensor = gz.LineSensor(23)
     
     def get_left(self):
-        # 0 should be black???
-        # 1 should be white???
-        if self.left_sensor.value == 0:
+        # 0 is white on this car.
+        # 1 is black on this car.
+        if self.left_sensor.value == 1:
             return "B"
         return "W"
     
     def get_middle(self):
-        if self.middle_sensor.value == 0:
+        if self.middle_sensor.value == 1:
             return "B"
         return "W"
     
     def get_right(self):
-        if self.right_sensor.value == 0:
+        if self.right_sensor.value == 1:
             return "B"
         return "W"
     
