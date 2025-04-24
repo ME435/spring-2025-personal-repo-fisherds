@@ -1,7 +1,7 @@
 import gpiozero as gz
 import time
 
-class UltraSonic:
+class Ultrasonic:
 
     def __init__(self):
         self.distance_sensor = gz.DistanceSensor(echo=22, trigger=27)
@@ -63,7 +63,7 @@ class LineSensors:
 if __name__ == "__main__":
     print("Local testing for the two sensor types")
     
-    ultrasonic = UltraSonic()
+    ultrasonic = Ultrasonic()
     line_sensors = LineSensors()
     while True:
         print(f"Distance in cm = {ultrasonic.get_cm()}")
