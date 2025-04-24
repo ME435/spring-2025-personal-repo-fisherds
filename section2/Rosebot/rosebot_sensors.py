@@ -1,9 +1,12 @@
 import gpiozero as gz
 import time
+import warnings
 
 class Ultrasonic:
 
     def __init__(self):
+        warnings.filterwarnings("ignore", category = gz.PWMSoftwareFallback)  # Ignore PWM software fallback warnings
+
         self.distance_sensor = gz.DistanceSensor(echo=22, trigger=27)
 
     def get_cm(self):
@@ -65,7 +68,10 @@ if __name__ == "__main__":
     
     ultrasonic = Ultrasonic()
     line_sensors = LineSensors()
-    while True:
-        print(f"Distance in cm = {ultrasonic.get_cm()}")
-        print(f"Line word = {line_sensors.get_lineword()}  value = {line_sensors.get_value()}")
-        time.sleep(2.0)
+    try:
+        while True:
+            print(f"Distance in cm = {ultrasonic.get_cm()}")
+            print(f"Line word = {line_sensors.get_lineword()}  value = {line_sensors.get_value()}")
+            time.sleep(2.0)
+    except KeyboardInterrupt:
+        print("End of program")
