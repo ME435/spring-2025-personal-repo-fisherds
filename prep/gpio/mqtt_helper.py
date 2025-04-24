@@ -9,8 +9,9 @@ class MqttClient(object):
   """Helper class to make it easier to work with MQTT subscriptions and publications."""
 
   def __init__(self):
-    self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1) # For newer paho-mqtt version use this
-    # self.client = mqtt.Client() # For older paho-mqtt versions use this
+    self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2) # For newer paho-mqtt version use this
+    # self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1) # For slightly older paho-mqtt versions use this
+    # self.client = mqtt.Client() # For much older paho-mqtt versions use this
     self.subscription_topic_name = None
     self.publish_topic_name = None
     self.callback = None
@@ -41,7 +42,8 @@ class MqttClient(object):
     self.client.publish(self.publish_topic_name, message)
 
   # noinspection PyUnusedLocal
-  def _on_connect(self, client, userdata, flags, rc):
+  # def _on_connect(self, client, userdata, flags, rc):    # use this for older paho-mqtt versions
+  def _on_connect(self, client, userdata, flags, rc, properties):
     if rc == 0:
         print(" ... Connected!")
     else:
@@ -55,7 +57,8 @@ class MqttClient(object):
     self.client.subscribe(self.subscription_topic_name)
 
   # noinspection PyUnusedLocal
-  def _on_subscribe(self, client, userdata, mid, granted_qos):
+  # def _on_subscribe(self, client, userdata, mid, granted_qos):  # use this for older paho-mqtt versions
+  def _on_subscribe(self, client, userdata, mid, granted_qos, properties):
     print("Subscribed to topic:", self.subscription_topic_name)
 
   # noinspection PyUnusedLocal
