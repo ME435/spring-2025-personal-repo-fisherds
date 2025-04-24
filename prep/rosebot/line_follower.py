@@ -33,6 +33,7 @@ def main():
                 if debug:
                     print(f"Line Follow {line_value} values to drive", lf, lr, rf, rr)
                 robot.drive_system.set_speeds(lf, lr, rf, rr)
+            
             if debug:
                 time.sleep(2.0)
             else:
