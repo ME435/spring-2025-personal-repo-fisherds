@@ -3,15 +3,29 @@
 """
 
 import json
+import paho.mqtt
 import paho.mqtt.client as mqtt
 
 class MqttClient(object):
   """Helper class to make it easier to work with MQTT subscriptions and publications."""
 
   def __init__(self):
-    self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2) # For newer paho-mqtt version use this
-    # self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1) # For slightly older paho-mqtt versions use this
-    # self.client = mqtt.Client() # For much older paho-mqtt versions use this
+    print(paho.mqtt.__version__)
+    version_parts = paho.mqtt.__version__.split(".")
+    major = int(version_parts[0])
+    minor = int(version_parts[1])
+
+    if major >= 2:
+        print(f"Using paho-mqtt {paho.mqtt.__version__} (VERSION2 API)")
+        self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
+        self.use_properties = True
+    elif major >= 1:
+        print(f"Using paho-mqtt {paho.mqtt.__version__} (VERSION1 API)")
+        self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1) # For newer paho-mqtt version use this
+    else:
+        print(f"Using paho-mqtt {paho.mqtt.__version__} (VERSION0 API)")
+        self.client = mqtt.Client()
+
     self.subscription_topic_name = None
     self.publish_topic_name = None
     self.callback = None
@@ -42,8 +56,7 @@ class MqttClient(object):
     self.client.publish(self.publish_topic_name, message)
 
   # noinspection PyUnusedLocal
-  # def _on_connect(self, client, userdata, flags, rc):    # use this for older paho-mqtt versions
-  def _on_connect(self, client, userdata, flags, rc, properties):
+  def _on_connect(self, client, userdata, flags, rc, properties=None):
     if rc == 0:
         print(" ... Connected!")
     else:
@@ -57,8 +70,7 @@ class MqttClient(object):
     self.client.subscribe(self.subscription_topic_name)
 
   # noinspection PyUnusedLocal
-  # def _on_subscribe(self, client, userdata, mid, granted_qos):  # use this for older paho-mqtt versions
-  def _on_subscribe(self, client, userdata, mid, granted_qos, properties):
+  def _on_subscribe(self, client, userdata, mid, granted_qos, properties=None):
     print("Subscribed to topic:", self.subscription_topic_name)
 
   # noinspection PyUnusedLocal
