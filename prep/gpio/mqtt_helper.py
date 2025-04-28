@@ -10,21 +10,21 @@ class MqttClient(object):
   """Helper class to make it easier to work with MQTT subscriptions and publications."""
 
   def __init__(self):
-    print(paho.mqtt.__version__)
-    version_parts = paho.mqtt.__version__.split(".")
-    major = int(version_parts[0])
-    minor = int(version_parts[1])
+    mqtt_version = paho.mqtt.__version__
+    print("MQTT version", mqtt_version)
+    major_version = int(mqtt_version.split(".")[0])
+    minor_version = int(mqtt_version.split(".")[1]) if len(mqtt_version.split(".")) > 1 else 0
 
-    if major >= 2:
-        print(f"Using paho-mqtt {paho.mqtt.__version__} (VERSION2 API)")
+    # Determine which style to use
+    if major_version >= 2:
         self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
         self.use_properties = True
-    elif major >= 1:
-        print(f"Using paho-mqtt {paho.mqtt.__version__} (VERSION1 API)")
-        self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1) # For newer paho-mqtt version use this
+    elif major_version == 1 and minor_version > 6:
+        self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1)
+        self.use_properties = False
     else:
-        print(f"Using paho-mqtt {paho.mqtt.__version__} (VERSION0 API)")
         self.client = mqtt.Client()
+        self.use_properties = False
 
     self.subscription_topic_name = None
     self.publish_topic_name = None
