@@ -121,7 +121,7 @@ if __name__ == "__main__":
     msg = msg_entry.get()
     msg_entry.delete(0, 'end')
     chat_window["text"] += "\nMe: " + msg
-    mqtt_client.send_message("chat", msg) # Sending MQTT message
+    mqtt_client.send_message("red", msg) # Sending MQTT message
 
   def quit_program(mqtt_client):
     mqtt_client.close()
@@ -154,7 +154,7 @@ if __name__ == "__main__":
 
   mqtt_client = MqttClient() # note, use "mqtt_helper.MqttClient" in other files
   mqtt_client.callback = lambda type, payload: example_mqtt_callback(type, payload, chat_window)
-  mqtt_client.connect("my_messages", "my_messages", use_off_campus_broker=False)  # "Send to" and "listen to" the same topic
+  mqtt_client.connect("me435/fisherds/#", "me435/fisherds/to_pi", use_off_campus_broker=False)  # "Send to" and "listen to" the same topic
 
   root.mainloop()
   
