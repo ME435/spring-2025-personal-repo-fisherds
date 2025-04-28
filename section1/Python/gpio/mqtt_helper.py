@@ -154,7 +154,7 @@ if __name__ == "__main__":
 
   mqtt_client = MqttClient() # note, use "mqtt_helper.MqttClient" in other files
   mqtt_client.callback = lambda type, payload: example_mqtt_callback(type, payload, chat_window)
-  mqtt_client.connect("my_messages", "my_messages", use_off_campus_broker=True)  # "Send to" and "listen to" the same topic
+  mqtt_client.connect("my_messages", "my_messages", use_off_campus_broker=False)  # "Send to" and "listen to" the same topic
 
   root.mainloop()
   
