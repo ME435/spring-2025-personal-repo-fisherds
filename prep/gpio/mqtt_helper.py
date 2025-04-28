@@ -15,7 +15,7 @@ class MqttClient(object):
     major_version = int(mqtt_version.split(".")[0])
     minor_version = int(mqtt_version.split(".")[1]) if len(mqtt_version.split(".")) > 1 else 0
 
-    # Determine which style to use
+    # Determine which MQTT version to use
     if major_version >= 2:
         self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
         self.use_properties = True
@@ -153,7 +153,7 @@ if __name__ == "__main__":
 
   mqtt_client = MqttClient() # note, use "mqtt_helper.MqttClient" in other files
   mqtt_client.callback = lambda type, payload: example_mqtt_callback(type, payload, chat_window)
-  mqtt_client.connect("my_messages", "my_messages", use_off_campus_broker=True)  # "Send to" and "listen to" the same topic
+  mqtt_client.connect("fisherds/#", "fisherds/to_pi", use_off_campus_broker=True)  # "Send to" and "listen to" the same topic
 
   root.mainloop()
   
