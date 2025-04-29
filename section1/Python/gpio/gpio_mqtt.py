@@ -15,7 +15,7 @@ class App:
         self.mqtt_client.callback = self.mqtt_callback
         self.mqtt_client.connect(subscription_topic_name="me435/fisherds/#",  # Could also use "me435/fisherds/to_pi"
                                  publish_topic_name="me435/fisherds/to_computer",
-                                 use_off_campus_broker=False)
+                                 use_off_campus_broker=True)
         
     def button_23_pressed(self):
         # print("Button 23 pressed")
