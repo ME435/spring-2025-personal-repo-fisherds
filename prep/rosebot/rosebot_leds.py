@@ -3,7 +3,7 @@ import time
 
 class CarLeds:
     def __init__(self):
-        self.leds = Freenove_SPI_LedPixel(count=8, bright=150)
+        self.leds = Freenove_SPI_LedPixel(count=8, bright=128)  # 128 = half brightness
 
     def turn_off(self):
         self.set_all_leds(0, 0, 0)

@@ -38,6 +38,12 @@ class App:
         if message_type == "beep":
             self.robot.buzzer.beep(on_time=0.1, off_time=0.3, n=2)
             
+            
+        if message_type == "set_led":
+            self.robot.leds.set_led(payload[0], payload[1], payload[2], payload[3])
+        if message_type == "set_all_leds":
+            self.robot.leds.set_all_leds(payload[0], payload[1], payload[2])    
+            
         if message_type == "mode":
             if payload == "drive_until_wall":
                 self.drive_until_wall = True
@@ -57,32 +63,53 @@ def main():
     # time.sleep(0.5)  # allow mqtt to connect
     # app.mqtt_client.send_message("is_streaming", True)
     
-    while True:
-        time.sleep(0.1)
-        
-        # print("Beep")
-        # app.mqtt_client.send_message("beep")
-        app.mqtt_client.send_message("set_speeds", [40, 40, 0, 0])
-        time.sleep(1)
-        app.mqtt_client.send_message("set_speeds", [0, 0, 0, 0])
-        time.sleep(5)
-        
-        if app.drive_until_wall:
-            if app.robot.ultrasonic.get_distance() < 0.2:
-                app.robot.drive_system.stop()
-                app.drive_until_wall = False
-        
-        now = datetime.datetime.now() # current date and time
-        date_time = now.strftime("%m/%d/%Y, %H:%M:%S")
-        timestamp_s = now.timestamp()
-        if timestamp_s - last_time_sent_s > 2 and app.is_streaming:
-            last_time_sent_s = timestamp_s
-            app.mqtt_client.send_message("line_sensor_reading", 
-                                        {"timestamp": date_time,
-                                        "left": app.robot.line_sensors.get_left(),
-                                        "middle": app.robot.line_sensors.get_middle(),
-                                        "right": app.robot.line_sensors.get_right()})
-
+    try:
+        while True:
+            time.sleep(0.1)
+            
+            # print("Test Beep")
+            # app.mqtt_client.send_message("beep")
+            # time.sleep(5)
+            
+            # print("Test set_speeds")
+            # app.mqtt_client.send_message("set_speeds", [40, 40, 0, 0])
+            # time.sleep(1)
+            # app.mqtt_client.send_message("set_speeds", [0, 0, 0, 0])
+            # time.sleep(5)
+            
+            print("Test set_led and set_all_leds")
+            app.mqtt_client.send_message("set_led", [0, 255, 0, 0])
+            time.sleep(1)
+            app.mqtt_client.send_message("set_led", [1, 0, 255, 0])
+            time.sleep(1)
+            app.mqtt_client.send_message("set_led", [7, 0, 0, 255])
+            time.sleep(1)
+            app.mqtt_client.send_message("set_all_leds", [0, 255, 255])
+            time.sleep(1)
+            app.mqtt_client.send_message("set_all_leds", [0, 0, 0])
+            time.sleep(1)
+            
+            
+            
+            if app.drive_until_wall:
+                if app.robot.ultrasonic.get_distance() < 0.2:
+                    app.robot.drive_system.stop()
+                    app.drive_until_wall = False
+            
+            now = datetime.datetime.now() # current date and time
+            date_time = now.strftime("%m/%d/%Y, %H:%M:%S")
+            timestamp_s = now.timestamp()
+            if timestamp_s - last_time_sent_s > 2 and app.is_streaming:
+                last_time_sent_s = timestamp_s
+                app.mqtt_client.send_message("line_sensor_reading", 
+                                            {"timestamp": date_time,
+                                            "left": app.robot.line_sensors.get_left(),
+                                            "middle": app.robot.line_sensors.get_middle(),
+                                            "right": app.robot.line_sensors.get_right()})
+    except KeyboardInterrupt:
+        print("Exiting...")
+        app.robot.drive_system.stop()
+        app.robot.leds.turn_off()
 
 
 
