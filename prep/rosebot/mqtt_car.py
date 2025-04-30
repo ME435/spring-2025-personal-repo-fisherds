@@ -32,8 +32,11 @@ class App:
         if message_type == "is_line_following":
             self.is_line_following = payload
             
-        if message_type == "drive":
-            self.robot.drive_system.go(payload[0], payload[1])
+        if message_type == "set_speeds":
+            self.robot.drive_system.set_speeds(payload[0], payload[1], payload[2], payload[3])
+            
+        if message_type == "beep":
+            self.robot.buzzer.beep(on_time=0.1, off_time=0.3, n=2)
             
         if message_type == "mode":
             if payload == "drive_until_wall":
@@ -57,6 +60,13 @@ def main():
     while True:
         time.sleep(0.1)
         
+        # print("Beep")
+        # app.mqtt_client.send_message("beep")
+        app.mqtt_client.send_message("set_speeds", [40, 40, 0, 0])
+        time.sleep(1)
+        app.mqtt_client.send_message("set_speeds", [0, 0, 0, 0])
+        time.sleep(5)
+        
         if app.drive_until_wall:
             if app.robot.ultrasonic.get_distance() < 0.2:
                 app.robot.drive_system.stop()
@@ -65,7 +75,6 @@ def main():
         now = datetime.datetime.now() # current date and time
         date_time = now.strftime("%m/%d/%Y, %H:%M:%S")
         timestamp_s = now.timestamp()
-
         if timestamp_s - last_time_sent_s > 2 and app.is_streaming:
             last_time_sent_s = timestamp_s
             app.mqtt_client.send_message("line_sensor_reading", 
