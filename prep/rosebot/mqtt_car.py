@@ -35,9 +35,21 @@ class App:
         if message_type == "set_speeds":
             self.robot.drive_system.set_speeds(payload[0], payload[1], payload[2], payload[3])
             
+        if message_type == "stop":
+            self.robot.drive_system.stop()
+            
+        if message_type == "left":
+            self.robot.drive_system.spin_in_place_for_degrees(payload, 40, True)
+        if message_type == "right":
+            self.robot.drive_system.spin_in_place_for_degrees(payload, 40, False)
+            
+        if message_type == "pan":
+            self.robot.servo_head.set_pan_position(payload)
+        if message_type == "tilt":
+            self.robot.servo_head.set_tilt_position(payload)
+            
         if message_type == "beep":
             self.robot.buzzer.beep(on_time=0.1, off_time=0.3, n=2)
-            
             
         if message_type == "set_led":
             self.robot.leds.set_led(payload[0], payload[1], payload[2], payload[3])
@@ -77,17 +89,17 @@ def main():
             # app.mqtt_client.send_message("set_speeds", [0, 0, 0, 0])
             # time.sleep(5)
             
-            print("Test set_led and set_all_leds")
-            app.mqtt_client.send_message("set_led", [0, 255, 0, 0])
-            time.sleep(1)
-            app.mqtt_client.send_message("set_led", [1, 0, 255, 0])
-            time.sleep(1)
-            app.mqtt_client.send_message("set_led", [7, 0, 0, 255])
-            time.sleep(1)
-            app.mqtt_client.send_message("set_all_leds", [0, 255, 255])
-            time.sleep(1)
-            app.mqtt_client.send_message("set_all_leds", [0, 0, 0])
-            time.sleep(1)
+            # print("Test set_led and set_all_leds")
+            # app.mqtt_client.send_message("set_led", [0, 255, 0, 0])
+            # time.sleep(1)
+            # app.mqtt_client.send_message("set_led", [1, 0, 255, 0])
+            # time.sleep(1)
+            # app.mqtt_client.send_message("set_led", [7, 0, 0, 255])
+            # time.sleep(1)
+            # app.mqtt_client.send_message("set_all_leds", [0, 255, 255])
+            # time.sleep(1)
+            # app.mqtt_client.send_message("set_all_leds", [0, 0, 0])
+            # time.sleep(1)
             
             
             
@@ -109,6 +121,9 @@ def main():
     except KeyboardInterrupt:
         print("Exiting...")
         app.robot.drive_system.stop()
+        app.robot.buzzer.beep(on_time=0.1, off_time=0.3, n=2)
+        app.robot.servo_head.reset()
+        time.sleep(0.5)
         app.robot.leds.turn_off()
 
 
