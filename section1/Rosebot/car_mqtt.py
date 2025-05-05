@@ -8,8 +8,8 @@ class App:
         
         self.mqtt_client = MqttClient()
         self.mqtt_client.callback = self.mqtt_callback
-        self.mqtt_client.connect(subscription_topic_name="me435/fisherds2/#",  # Could also use "me435/fisherds/to_pi"
-                                 publish_topic_name="me435/fisherds2/to_computer",
+        self.mqtt_client.connect(subscription_topic_name="me435/fisherds/#",  # Could also use "me435/fisherds/to_pi"
+                                 publish_topic_name="me435/fisherds/to_computer",
                                  use_off_campus_broker=True)        
         
     def mqtt_callback(self, type_name, payload):
