@@ -26,6 +26,9 @@ class App:
             self.robot.servo_head.set_pan_position(payload)
         if type_name == "tilt":
             self.robot.servo_head.set_tilt_position(payload)
+            
+        if type_name == "beep":
+            self.robot.buzzer.beep(on_time=0.1, off_time=0.3, n=2)
 
 def main():
     print("Car MQTT for Lab 5")
@@ -44,22 +47,22 @@ def main():
             # time.sleep(2)
             
             # Test the servo head
-            app.mqtt_client.send_message("pan", 90)
-            app.mqtt_client.send_message("tilt", 90)
-            time.sleep(2)
-            app.mqtt_client.send_message("pan", 20)
-            time.sleep(2)
-            app.mqtt_client.send_message("pan", 160)
-            time.sleep(2)
-            app.mqtt_client.send_message("pan", 90)
-            time.sleep(2)
-            app.mqtt_client.send_message("tilt", 70)
-            time.sleep(2)
-            app.mqtt_client.send_message("tilt", 160)
-            time.sleep(2)
-            app.mqtt_client.send_message("pan", 90)
-            app.mqtt_client.send_message("tilt", 90)
-            time.sleep(4)
+            # app.mqtt_client.send_message("pan", 90)
+            # app.mqtt_client.send_message("tilt", 90)
+            # time.sleep(2)
+            # app.mqtt_client.send_message("pan", 20)
+            # time.sleep(2)
+            # app.mqtt_client.send_message("pan", 160)
+            # time.sleep(2)
+            # app.mqtt_client.send_message("pan", 90)
+            # time.sleep(2)
+            # app.mqtt_client.send_message("tilt", 70)
+            # time.sleep(2)
+            # app.mqtt_client.send_message("tilt", 160)
+            # time.sleep(2)
+            # app.mqtt_client.send_message("pan", 90)
+            # app.mqtt_client.send_message("tilt", 90)
+            # time.sleep(4)
 
     except KeyboardInterrupt:
         print("Exiting...")

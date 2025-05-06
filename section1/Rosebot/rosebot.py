@@ -1,7 +1,7 @@
 from rosebot_drive_system import DriveSystem
 from rosebot_sensors import UltraSonic, LineSensors
 from rosebot_servo_head import ServoHead
-
+import gpiozero as gz
 class RoseBot:
     
     def __init__(self):
@@ -9,4 +9,5 @@ class RoseBot:
         self.ultrasonic = UltraSonic()
         self.line_sensors = LineSensors()
         self.servo_head = ServoHead()
+        self.buzzer = gz.Buzzer(17)
         
