@@ -10,7 +10,7 @@ class App:
         self.mqtt_client.callback = self.mqtt_callback
         self.mqtt_client.connect(subscription_topic_name="me435/fisherds/#",  # Could use me435/fisherds/to_pi
                                  publish_topic_name="me435/fisherds/to_computer",
-                                 use_off_campus_broker=True)
+                                 use_off_campus_broker=False)
 
     def mqtt_callback(self, type_name, payload):
         print(f"My callback: {type_name} - {payload}")
