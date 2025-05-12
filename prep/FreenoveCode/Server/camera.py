@@ -35,7 +35,7 @@ class Camera:
 
     def start_image(self) -> None:
         """Start the camera preview and capture."""
-        self.camera.start_preview(Preview.QTGL)  # Start the camera preview using the QTGL backend
+        # self.camera.start_preview(Preview.QTGL)  # Start the camera preview using the QTGL backend
         self.camera.start()                      # Start the camera
 
     def save_image(self, filename: str) -> dict:
