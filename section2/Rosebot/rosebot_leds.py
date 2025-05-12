@@ -1,9 +1,12 @@
 from spi_ledpixel import Freenove_SPI_LedPixel
+import gpiozero as gz
 import time
 
 class CarLeds:
     
     def __init__(self):
+        # Test that had no effect!
+        # pin18 = gz.InputDevice(18, pull_up=False)  # GPIO pin 18 out of the way
         self.neopixel_strip = Freenove_SPI_LedPixel(bright=128)
 
     def set_all_leds(self, red, green, blue):
