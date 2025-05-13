@@ -1,6 +1,21 @@
 import gpiozero as gz
 import time
 import warnings
+from adc import ADC
+
+class RosebotADC():
+    def __init__(self):
+        self.adc = ADC()  # Initialize the ADC class
+
+    def get_left_photoresistor(self):
+        return self.adc.read_adc(0)  # Read the left photoresistor value
+
+    def get_right_photoresistor(self):
+        return self.adc.read_adc(1)  # Read the right photoresistor value
+
+    def get_battery_voltage(self):
+        return self.adc.read_adc(2) * (3 if self.adc.pcb_version == 1 else 2)  # Calculate the power value based on the PCB version
+    
 
 class UltraSonic:
 
@@ -71,8 +86,15 @@ class LineSensors:
 
 
 def main():
-    print("Local testing for the two sensor types")
+    print("Local testing for the sensors")
+    
     if True:
+        test_sensor = RosebotADC()
+        while True:
+            print(f"Left = {test_sensor.get_left_photoresistor()}  Right = {test_sensor.get_right_photoresistor()}  Battery = {test_sensor.get_battery_voltage()}")
+            time.sleep(2.0)
+            
+    if False:
         test_sensor = UltraSonic()
         while True:
             print(f"Distance in cm = {test_sensor.get_cm()}")

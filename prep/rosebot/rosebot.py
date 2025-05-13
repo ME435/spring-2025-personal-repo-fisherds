@@ -14,4 +14,5 @@ class RoseBot:
         self.buzzer = gz.Buzzer(17)
         self.leds = CarLeds()
         self.servo_head = ServoHead()
+        self.adc = rosebot_sensors.RosebotADC()
 

@@ -63,6 +63,10 @@ class App:
             if payload == "drive_until_line":
                 self.drive_until_line = True
                 self.robot.drive_system.go(90, 90)
+        
+        if message_type == "get_voltage":
+            voltage = self.robot.adc.get_battery_voltage()
+            self.mqtt_client.send_message("voltage", voltage)
 
                 
 def main():
