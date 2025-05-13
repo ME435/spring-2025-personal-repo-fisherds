@@ -39,6 +39,9 @@ class App:
             elif self.mode == "drive_until_wall" or self.mode == "drive_until_line":
                 self.robot.drive_system.go(20, 20)
 
+        if type_name == "get_voltage":
+            voltage = self.robot.adc.get_battery_voltage()
+            self.mqtt_client.send_message("voltage", voltage)
                 
 
 def main():
@@ -76,7 +79,7 @@ def main():
                 print("Use my old code to get the sensors (ultrasonic, line sensor) and update the speeds")
                 time.sleep(1.5)  # For testing to reduce the number of prints
             elif app.mode == "light_following":
-                print("New code get the sensors (ultrasonic, ADC photoresistors) and update the speeds")
+                print("New code get the sensors (ADC photoresistors) and update the speeds")
                 time.sleep(1.5)  # For testing to reduce the number of prints
                 
             
