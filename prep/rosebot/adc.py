@@ -1,15 +1,12 @@
 import smbus  # Import the smbus module for I2C communication
 import time  # Import the time module for sleep functionality
-from parameter import ParameterManager  # Import the ParameterManager class from the parameter module
 
 class ADC:
     def __init__(self):
         """Initialize the ADC class."""
         self.I2C_ADDRESS = 0x48                                               # Set the I2C address of the ADC
         self.ADS7830_COMMAND = 0x84                                           # Set the command byte for ADS7830
-        self.parameter_manager = ParameterManager()                           # Create an instance of ParameterManager
-        self.pcb_version = self.parameter_manager.get_pcb_version()           # Get the PCB version
-        self.adc_voltage_coefficient = 3.3 if self.pcb_version == 1 else 5.2  # Set the ADC voltage coefficient based on the PCB version
+        self.adc_voltage_coefficient = 5.2  # Set the ADC voltage coefficient based on the PCB version
         self.i2c_bus = smbus.SMBus(1)                                         # Initialize the I2C bus
 
     def _read_stable_byte(self) -> int:
@@ -49,7 +46,7 @@ if __name__ == '__main__':
         while True:
             left_idr = adc.read_adc(0)                                        # Read the left photoresistor value
             right_idr = adc.read_adc(1)                                       # Read the right photoresistor value
-            power = adc.read_adc(2) * (3 if adc.pcb_version == 1 else 2)      # Calculate the power value based on the PCB version
+            power = adc.read_adc(2) * 2      # Calculate the power value based on the PCB version
             print(f"Left IDR: {left_idr}V, Right IDR: {right_idr}V, Power: {power}V")  # Print the values of left IDR, right IDR, and power
             time.sleep(1)                                                     # Wait for 1 second
     except KeyboardInterrupt:

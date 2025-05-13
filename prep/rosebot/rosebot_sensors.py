@@ -14,7 +14,7 @@ class RosebotADC():
         return self.adc.read_adc(1)  # Read the right photoresistor value
 
     def get_battery_voltage(self):
-        return self.adc.read_adc(2) * (3 if self.adc.pcb_version == 1 else 2)  # Calculate the power value based on the PCB version
+        return self.adc.read_adc(2) * 2  # Calculate the power value based on the PCB version
     
 
 class UltraSonic:
@@ -91,7 +91,7 @@ def main():
     if True:
         test_sensor = RosebotADC()
         while True:
-            print(f"Left = {test_sensor.get_left_photoresistor()}  Right = {test_sensor.get_right_photoresistor()}  Battery = {test_sensor.get_battery_voltage()}")
+            print(f"Left = {test_sensor.get_left_photoresistor()} v Right = {test_sensor.get_right_photoresistor()} v Battery = {test_sensor.get_battery_voltage()} v")
             time.sleep(2.0)
             
     if False:
