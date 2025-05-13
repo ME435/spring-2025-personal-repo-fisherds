@@ -37,6 +37,14 @@ class App:
 
         if type_name == "mode":
             self.mode = payload
+            if self.mode == "none":
+                self.robot.drive_system.stop()  # Could maybe cause a race condition.
+            if self.mode == "drive_until_wall" or self.mode == "drive_until_line":
+                self.robot.drive_system.go(25, 25)
+            
+        if type_name == "get_voltage":
+            voltage = self.robot.adc.get_battery_voltage()
+            self.mqtt_client.send_message("voltage", voltage)
             
 
 def main():

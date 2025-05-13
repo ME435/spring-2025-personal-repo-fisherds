@@ -1,6 +1,27 @@
 import gpiozero as gz
 import warnings
 import time
+from adc import ADC
+
+
+class RosebotAdc:
+    
+    def __init__(self):
+        self.adc = ADC()
+        
+    def get_left_photoresistor(self):
+        return self.adc.read_adc(0)
+        
+    def get_right_photoresistor(self):
+        return self.adc.read_adc(1)
+
+    def get_battery_voltage(self):
+        return self.adc.read_adc(2) * 2
+        # The battery voltage is multiplied by 2 to account for the PCB version.
+    
+    def close(self):
+        self.adc.close_i2c()
+
 
 class UltraSonic:
     
@@ -66,12 +87,18 @@ class LineSensors:
 if __name__ == "__main__":
     ultrasonic = UltraSonic()
     line_sensors = LineSensors()
+    rosebot_adc = RosebotAdc()
     try:
         while True:
             distance = ultrasonic.get_cm()
             # print(f"Distance: {distance:.2f} cm")
             # print(f"Left Sensor: {line_sensors.get_left()}")
-            print(f"Line Sensors: {line_sensors.get_lineword()}  Value: {line_sensors.get_value()}")
+            # print(f"Line Sensors: {line_sensors.get_lineword()}  Value: {line_sensors.get_value()}")
+            
+            print(f"Left LDR: {rosebot_adc.get_left_photoresistor()}V, Right LDR: {rosebot_adc.get_right_photoresistor()}V, Battery Voltage: {rosebot_adc.get_battery_voltage()}V")
+            
             time.sleep(2.0)
     except KeyboardInterrupt:
         print("Program terminated.")
+        rosebot_adc.close()
+        

@@ -12,7 +12,7 @@ class App:
         self.mqtt_client = mh.MqttClient()
         self.mqtt_client.connect(subscription_topic_name="me435/fisherds/#",
                             publish_topic_name="me435/fisherds/to_computer",
-                            use_off_campus_broker=True)
+                            use_off_campus_broker=False)
         self.mqtt_client.callback = self.mqtt_callback
 
         self.robot = rosebot.RoseBot()
